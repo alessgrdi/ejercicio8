@@ -38,7 +38,7 @@ exports.create = function(req, res) {
         res.render('quizes/new', {quiz: quiz, errors: err.errors});
       } else {*/
          // save: guarda en DB campos pregunta y respuesta de quiz
-        quiz.save({fields: ["pregunta", "respuesta"]}).then( function(){ 
+        quiz.save({fields: ["pregunta", "respuesta", "tema"]}).then( function(){
           res.redirect('/quizes');
         })
       //}      // res.redirect: Redirección HTTP a lista de preguntas
@@ -91,7 +91,15 @@ exports.index = function(req, res) {
 // GET /quizes/new
 exports.new = function(req, res) {
   var quiz = models.Quiz.build( // crea objeto quiz
-    {pregunta: "Pregunta", respuesta: "Respuesta"}
+    {pregunta: "", respuesta: "", tema: ""}
   );
   res.render('quizes/new', {quiz: quiz});//, errors: []});
+};
+
+// DELETE /quizes/:id
+exports.destroy = function(req, res) {
+  console.log("req.quiz.id: " + req.quiz.id);
+  req.quiz.destroy().then( function() {
+    res.redirect('/quizes');
+  })//.catch(function(error){next(error)});
 };
